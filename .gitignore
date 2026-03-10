@@ -1,2 +1,8 @@
 *.txt
 *.py
+*.c
+*.o
+hello-world
+random
+montecarlo-pi
+montecarlo-pi2
