@@ -11,4 +11,3 @@ Containerfile copy
 *.svg
 result/*
 result
-*.nix
