@@ -171,3 +171,17 @@ int main(int argc, char* argv[]) {
     return(0);
 }
 ```
+
+## 3.3.1 Questions
+
+**1**) We need 2 arguments : the seed and the number of iterations. 
+
+**2**) With podman image ls we can notice that the image random have a big size (291 MB). It is because the build image contains all the tools to compile the code, while the random image only contains the executable file.
+
+**3**) With podman image ls we can notice that the image random have a size of 8.75 MB. It is less than the size of the build image (291 MB). It is because the build image contains all the tools to compile the code, while the random image only contains the executable file.
+
+**4**) The line 8 serve to copy the executable file from the build image to the random image. We need this line because the random image only contains the executable file and not the source code. It is a good idea.
+
+**6**) [IA] Whether you get the same output depends entirely on how your random seed is initialized. If your code uses a dynamic seed (like the current time), the results will differ; however, if you use a fixed seed, you will get identical outputs because the container ensures everyone is using the exact same libraries and execution environment.
+
+**7**) [IA] Using podman save and podman load transfers the complete container image as a .tar archive, which includes all filesystem layers, dependencies, and the compiled executable. This guarantees that other students can reproduce your exact environment, eliminating any inconsistencies caused by differences in their host operating systems.
