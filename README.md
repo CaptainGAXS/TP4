@@ -184,4 +184,5 @@ int main(int argc, char* argv[]) {
 
 **6**) [IA] Whether you get the same output depends entirely on how your random seed is initialized. If your code uses a dynamic seed (like the current time), the results will differ; however, if you use a fixed seed, you will get identical outputs because the container ensures everyone is using the exact same libraries and execution environment.
 
-**7**) [IA] Using podman save and podman load transfers the complete container image as a .tar archive, which includes all filesystem layers, dependencies, and the compiled executable. This guarantees that other students can reproduce your exact environment, eliminating any inconsistencies caused by differences in their host operating systems.
+**7**) [Net] Using podman save and podman load transfers the complete container image as a .tar archive, which includes all filesystem layers, dependencies, and the compiled executable. This guarantees that other persons can reproduce your exact environment, eliminating any inconsistencies caused by differences in their host operating systems.
+

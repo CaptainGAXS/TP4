@@ -8,3 +8,7 @@ montecarlo-pi
 montecarlo-pi2
 Containerfile
 Containerfile copy
+*.svg
+result/*
+result
+*.nix
