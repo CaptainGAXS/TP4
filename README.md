@@ -186,3 +186,65 @@ int main(int argc, char* argv[]) {
 
 **7**) [Net] Using podman save and podman load transfers the complete container image as a .tar archive, which includes all filesystem layers, dependencies, and the compiled executable. This guarantees that other persons can reproduce your exact environment, eliminating any inconsistencies caused by differences in their host operating systems.
 
+## 4.1.6 Questions
+**1**) The resulting binary is the same as the others students who are on the same Linux distribution. 
+
+**2**) The installation path is the same as the others students who are on the same Linux distribution. We can view it with the command realpath result.
+
+**3**) If we build the code several times, we will get the same output because Nix use the same dependencies (flake.lock doesn't change) and the same build environment. It is build-time reproducible.
+
+**4**) When we run nix shell nixpkgs#hello, Nix launches a temporary shell with the hello package available.
+nix profile add nixpkgs#hello installs the hello package into the user profile, making it available in any shell session.
+
+**5**) The Nix store is a place where Nix keeps all the packages and dependencies. It is immutable because once a package is built, it cannot be modified. This ensures that the same package will always produce the same result.
+
+**6**) nix flake lock create a flake.lock file which contains the exact versions of the dependencies used by flake. It is important for the reproducibility because it ensures that everyone is using the same versions of the dependencies.
+
+**7**) [Web]  During a Nix build, the sandbox isolates the build environment from the host system. If a program tries to download a file from the Internet or read a host file such as /etc/passwd, the build will usually fail because those resources are not declared as inputs and are therefore blocked.
+
+This restriction is important because it preserves reproducibility and security. A build must depend only on explicit, known inputs. Otherwise, the result could change depending on the machine, the network, or the time of the build, which would make it non-deterministic.
+
+**8**) [Web] Nix keeps the project reproducible by fixing dependencies to exact versions instead of always using the latest available ones.
+
+If an upstream dependency changes, your project does not automatically start using that new version, because the build is tied to the versions recorded in the Nix inputs, especially in flake.lock for flakes. As long as the lock file and source code stay the same, Nix rebuilds with the same dependency set and produces the same result. Only an explicit update of the inputs changes what gets built.
+
+**9**) [IA] A minimal flake.nix could define a development shell containing Java and GCC, for example with pkgs.jdk and pkgs.gcc. The idea is to declare the tools in devShells so that every student enters the same environment with nix develop.
+
+Yes, the flake.lock file should also be shared. It is essential for reproducibility because it pins the exact versions of dependencies. Without it, different students could resolve different versions of nixpkgs and get slightly different environments.
+
+```nix
+{
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+    in {
+      devShells.${system}.default = pkgs.mkShell {
+        packages = [
+          pkgs.jdk
+          pkgs.gcc
+        ];
+      };
+    };
+}
+```
+
+## 4.2 General questions
+**1**) The advantages of using Nix are that it provides reproducibility, isolation, and easy management of dependencies. It ensures that our builds are deterministics. On the contrary, the dependencies of docker and podman are not managed in the same way, which can lead to inconsistencies.
+
+**2**) [IA] No, it is not fully safe to run a file or container image from an unknown source on your machine. Running a file directly is usually riskier, because it can access your user files, use the network, and potentially exploit local vulnerabilities.
+
+Docker and Podman provide isolation through Linux namespaces, cgroups, seccomp, and restricted capabilities. This reduces risk, but containers still share the host kernel, so kernel flaws, privileged containers, mounted host volumes, or bad configuration can break that isolation.
+
+In short, containers are safer than running unknown code directly, but they are not a complete security boundary. For untrusted code, a virtual machine is usually the safer option.
+
+**3**) No, as we have learned in the Deep Learning course, when we make a prompt to an LLM, there is randomness (probability distribution over the next token). However, if the temperature is set to 0, the output will be deterministic.
+
+**4**) Force him to install Nix :). Well, we can share him the executable file.
+
+**5**) That could be interesting. We have already learned to use Latex but not Typst.
+
+**6**) The subject is very interesting and the PDF file is complete and clear. I appreciated your oral explanations. 
+However, we don't have enough time to do all the questions properly! As it is marked, we want (must) rush and sometimes use [IA] whereas we could have thought about it if we had the time. This lab should be split into two parts.
